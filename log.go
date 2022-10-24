@@ -122,7 +122,7 @@ func NewJSONLogFormat(t time.Time) string {
 		JSONLogFormat,
 		gofakeit.IPv4Address(),
 		RandAuthUserID(),
-		t.Format(CommonLog),
+		t.Format(JSONLog),
 		gofakeit.HTTPMethod(),
 		RandResourceURI(),
 		RandHTTPVersion(),
