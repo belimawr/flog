@@ -26,11 +26,14 @@ Options:
                            - rfc3164
                            - rfc5424
                            - json
-  -o, --output string      output filename. Path-like is allowed. (default "generated.log")
+  -o, --output string      output filename or HTTP server address. Path-like is allowed.
+                           - default "generated.log" for files
+                           - default ":3000" for type == 'http'
   -t, --type string        log output type. available types:
                            - stdout (default)
                            - log
                            - gz
+                           - http
   -n, --number integer     number of lines to generate.
   -b, --bytes integer      size of logs to generate (in bytes).
                            "bytes" will be ignored when "number" is set.
@@ -47,7 +50,7 @@ Options:
 `
 
 var validFormats = []string{"apache_common", "apache_combined", "apache_error", "rfc3164", "rfc5424", "common_log", "json"}
-var validTypes = []string{"stdout", "log", "gz"}
+var validTypes = []string{"stdout", "log", "gz", "http"}
 
 // Option defines log generator options
 type Option struct {
@@ -217,6 +220,11 @@ func ParseOptions() *Option {
 	if opts.SplitBy, err = ParseSplitBy(*splitBy); err != nil {
 		errorExit(err)
 	}
+
+	if opts.Type == "http" && *output == opts.Output {
+		*output = ":3000"
+	}
+
 	opts.Output = *output
 	opts.Overwrite = *overwrite
 	opts.Forever = *forever
